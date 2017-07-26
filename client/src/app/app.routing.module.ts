@@ -7,6 +7,10 @@ const appRoutes: Routes = [
     {
         path: '',
         component: NoteComponent
+    },
+    {
+        path: ':id',
+        component: NoteComponent
     }
 ];
 

@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var NoteBO = require('../businessObject/noteBo');
+var NoteBO = require('./note.business');
 
 //Get By Code
 router.get('/code/:id', function (req, res) {
@@ -54,8 +54,8 @@ router.post('', function (req, res) {
     });
 });
 
-//Update Contractor
-router.put('/', function (req, res) {
+//Update Note
+router.put('', function (req, res) {
     let note = req.body;
 
     NoteBO.updateNote(note).then((response) => {

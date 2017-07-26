@@ -48,7 +48,7 @@ app.all('/*', function (req, res, next) {
 });
 
 app.use('/', index);
-app.use('/api', note);
+app.use('/api/note', note);
 
 mongoose.Promise = Promise;
 mongoose.connect(config.database);

@@ -1,7 +1,7 @@
 var Promise = require('bluebird');
 
-var Note = require('../models/note');
-var HttpStatus = require('../helpers/statuses');
+var Note = require('./note');
+const HttpStatus = require('../helpers/statuses');
 
 var ErrorResponse = {
     status: 500,
@@ -15,6 +15,28 @@ module.exports.getByCode = function (code) {
                 ErrorResponse.status = HttpStatus.InternalServerError;
                 ErrorResponse.error = err;
                 reject(ErrorResponse);
+                return;
+            }
+            if (note == null) {
+                var newNote = new Note({
+                    code: code,
+                    content: '',
+                    password: ''
+                });
+                Note.createNote(newNote, (err, createdNote) => {
+                    if (err) {
+                        ErrorResponse.status = HttpStatus.InternalServerError;
+                        ErrorResponse.error = err;
+                        reject(ErrorResponse);
+                        return;
+                    }
+                    let response = {
+                        status: HttpStatus.Created,
+                        data: createdNote
+                    }
+                    resolve(response);
+                    return;
+                });
                 return;
             }
             let response = {
@@ -46,7 +68,7 @@ module.exports.getById = function (id) {
 
 module.exports.createNote = function (note) {
     return new Promise((resolve, reject) => {
-        if (!note.note) {
+        if (!note.content) {
             ErrorResponse.status = HttpStatus.BadRequest
             ErrorResponse.error = 'Bad Data';
             reject(ErrorResponse);

@@ -17,7 +17,7 @@ var NoteSchema = mongoose.Schema({
 var Note = module.exports = mongoose.model('Note', NoteSchema);
 
 module.exports.getByCode = function (code, callback) {
-    Note.find({ "code": code }, callback);
+    Note.findOne({ "code": code }, callback);
 }
 
 module.exports.getById = function (id, callback) {
