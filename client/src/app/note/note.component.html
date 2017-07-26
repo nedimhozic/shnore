@@ -1,5 +1,5 @@
 <div class="paper">
     <div class="paper-content">
-        <textarea [(ngModel)]="note.Content"></textarea>
+        <textarea [(ngModel)]="note.content" (keyup)="onKeyup()" (keypress)="onKeydown()"></textarea>
     </div>
 </div>

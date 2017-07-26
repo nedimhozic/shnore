@@ -14,12 +14,14 @@ import { Note } from './note.model';
 export class NoteComponent {
   private note: Note = new Note();
   private id: string;
+  private typingTimer: number;
+  private doneTypingInterval: Number = 800;
 
   constructor(
-    private router: Router, 
+    private router: Router,
     private route: ActivatedRoute,
     private noteService: NoteService
-    ) {
+  ) {
     var parameters = this.route.params.subscribe(params => {
       let id = params['id'];
       if (!id) {
@@ -31,15 +33,28 @@ export class NoteComponent {
     });
   }
 
-  successCallback(data: any){
+  successCallback(data: any) {
     this.note = new Note();
-    this.note.Code = data.code;
-    this.note.Content = data.content;
-    this.note.Password = data.password;
-    this.id = data._id;
+    this.note.code = data.code;
+    this.note.content = data.content;
+    this.note.password = data.password;
+    this.note._id = data._id;
   }
 
-  errorCallback(data: any){
+  errorCallback(data: any) {
 
+  }
+
+  onKeyup(){
+      clearTimeout(this.typingTimer);
+      this.typingTimer = setTimeout(this.doneTyping.bind(this), this.doneTypingInterval);
+  }
+
+  onKeydown(){
+      clearTimeout(this.typingTimer);
+  }
+
+  doneTyping(){
+      this.noteService.updateNote(this.note, null, null);
   }
 }

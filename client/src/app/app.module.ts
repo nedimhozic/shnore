@@ -6,13 +6,15 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { NoteComponent } from './note/note.component';
+import { ModalComponent } from './modal/modal.component';
 
 import { BaseService } from './common/base.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NoteComponent
+    NoteComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,

@@ -46,10 +46,12 @@ export class NoteService {
     updateNote(note: Note, successCallback: (data: any) => void, errorCallback: (data: any) => void) {
         this.baseService.put('note', note)
         .subscribe(
-            data => successCallback(data),
+            data => {
+                if(successCallback) successCallback(data);
+            },
             err => {
                 if (err.status >= 400 && err.status < 500) {
-                    errorCallback(JSON.parse(err._body).message);
+                    if(errorCallback) errorCallback(JSON.parse(err._body).message);
                 }
                 else {
                     throw new Error(err);

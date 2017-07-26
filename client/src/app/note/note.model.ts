@@ -1,5 +1,6 @@
 export class Note {
-    public Code: string;
-    public Content: string;
-    public Password: string;
+    public _id: string; 
+    public code: string;
+    public content: string;
+    public password: string;
 }
