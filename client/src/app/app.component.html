@@ -5,19 +5,7 @@
     <div id="nav">
         <a href="#">Help</a>
         <span class="separator">|</span>
-        <a href="javascript:void(0)" (click)="modal.show()">Set Password</a>
+        <a href="javascript:void(0)" (click)="openModal()">Set Password</a>
     </div>
 </header>
 <router-outlet></router-outlet>
-<app-modal #modal>
-    <div class="app-modal-header">
-      header
-    </div>
-    <div class="app-modal-body">
-      Whatever content you like, form fields, anything
-    </div>
-    <div class="app-modal-footer">
-      <button type="button" class="btn btn-default" (click)="modal.hide()">Close</button>
-      <button type="button" class="btn btn-primary">Save changes</button>
-    </div>
-  </app-modal>

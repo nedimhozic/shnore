@@ -9,6 +9,7 @@ import { NoteComponent } from './note/note.component';
 import { ModalComponent } from './modal/modal.component';
 
 import { BaseService } from './common/base.service';
+import { TriggerService } from './common/trigger.service';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,7 @@ import { BaseService } from './common/base.service';
     ReactiveFormsModule,
     HttpModule
   ],
-  providers: [BaseService],
+  providers: [BaseService, TriggerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
