@@ -1,8 +1,9 @@
 <div #overlay>
     <div class="modal fade" tabindex="-1" [ngClass]="{'in': visibleAnimate}" [ngStyle]="{'display': visible ? 'block' : 'none', 'opacity': visibleAnimate ? 1 : 0}">
+        <span class="close-btn">X</span>
         <div class="modal-dialog">
-                <input type="password" id="password" class="form-control input-lg" placeholder="Password">
-                <button id="save" class="btn btn-primary btn-lg">Save</button>
+                <input type="password" id="password" placeholder="password">
+                <button id="save">save</button>
         </div>
     </div>
 </div>

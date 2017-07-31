@@ -27,10 +27,4 @@ export class ModalComponent {
     this.renderer.setElementStyle(this.overlay.nativeElement, 'opacity', '0');
     setTimeout(() => this.visible = false, 300);
   }
-
-//   public onContainerClicked(event: MouseEvent): void {
-//     if ((<HTMLElement>event.target).classList.contains('modal')) {
-//       this.hide();
-//     }
-//   }
 }
