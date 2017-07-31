@@ -3,3 +3,16 @@
         <textarea [(ngModel)]="note.content" (keyup)="onKeyup()" (keypress)="onKeydown()"></textarea>
     </div>
 </div>
+
+<app-modal #modal>
+    <div class="app-modal-header">
+      header
+    </div>
+    <div class="app-modal-body">
+      Whatever content you like, form fields, anything
+    </div>
+    <div class="app-modal-footer">
+      <button type="button" class="btn btn-default" (click)="modal.hide()">Close</button>
+      <button type="button" class="btn btn-primary">Save changes</button>
+    </div>
+  </app-modal>

@@ -33,3 +33,9 @@ module.exports.updateNote = function (note, callback) {
     Note.findOneAndUpdate(query, note, { new: true }, callback);
 }
 
+module.exports.setPassword = function (code, password, callback) {
+    var query = { code: code };
+    Note.findOneAndUpdate(query, { password: password }, { new: true }, callback);
+}
+
+

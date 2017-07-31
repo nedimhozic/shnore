@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UUID } from 'angular2-uuid';
 
 import { NoteService } from './note.service';
 import { Note } from './note.model';
+import { TriggerService } from '../common/trigger.service';
+import { ModalType } from '../modal/modal-type.enum';
 
 @Component({
   selector: 'note',
@@ -12,6 +14,7 @@ import { Note } from './note.model';
   providers: [NoteService]
 })
 export class NoteComponent {
+  @ViewChild('modal') modal: any;
   private note: Note = new Note();
   private id: string;
   private typingTimer: number;
@@ -20,16 +23,36 @@ export class NoteComponent {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private noteService: NoteService
+    private noteService: NoteService,
+    private trigger: TriggerService
   ) {
     var parameters = this.route.params.subscribe(params => {
-      let id = params['id'];
-      if (!id) {
+      this.id = params['id'];
+      if (!this.id) {
         let guid = UUID.UUID();
         this.router.navigateByUrl('/' + guid);
       } else {
-        this.noteService.getByCode(id, this.successCallback.bind(this), this.errorCallback.bind(this));
+        this.noteService.getByCode(this.id, '', this.successCallback.bind(this), this.errorCallback.bind(this));
       }
+    });
+
+    this.handleSubjects();
+  }
+
+  handleSubjects() {
+    this.trigger.openModalSub.subscribe((type: ModalType) => {
+      this.modal.show(type);
+    });
+
+    this.trigger.setPasswordSub.subscribe((password: string) => {
+      this.note.password = password;
+      this.noteService.setPassword(this.note, function (data) {
+
+      }, null);
+    });
+
+    this.trigger.confirmPasswordSub.subscribe((password: string) => {
+      this.noteService.getByCode(this.id, password, this.successCallback.bind(this), this.errorCallback.bind(this));
     });
   }
 
@@ -42,19 +65,20 @@ export class NoteComponent {
   }
 
   errorCallback(data: any) {
-
+    if (data == 401)
+      this.trigger.openModal(ModalType.Confirm);
   }
 
-  onKeyup(){
-      clearTimeout(this.typingTimer);
-      this.typingTimer = setTimeout(this.doneTyping.bind(this), this.doneTypingInterval);
+  onKeyup() {
+    clearTimeout(this.typingTimer);
+    this.typingTimer = setTimeout(this.doneTyping.bind(this), this.doneTypingInterval);
   }
 
-  onKeydown(){
-      clearTimeout(this.typingTimer);
+  onKeydown() {
+    clearTimeout(this.typingTimer);
   }
 
-  doneTyping(){
-      this.noteService.updateNote(this.note, null, null);
+  doneTyping() {
+    this.noteService.updateNote(this.note, null, null);
   }
 }

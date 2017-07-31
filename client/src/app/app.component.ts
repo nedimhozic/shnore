@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { TriggerService } from './common/trigger.service';
+import { ModalType } from './modal/modal-type.enum';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app';
+  constructor(private trigger: TriggerService){
+
+  }
+
+  openModal(){
+    this.trigger.openModal(ModalType.Set);
+  }
 }

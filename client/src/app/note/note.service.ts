@@ -15,11 +15,19 @@ export class NoteService {
 
     constructor(private baseService: BaseService) { }
 
-    getByCode(code: string, successCallback: (data: any) => void, errorCallback: (data: any) => void) {
-        this.baseService.get('note/code/' + code)
+    getByCode(code: string, token: string, successCallback: (data: any) => void, errorCallback: (data: any) => void) {
+        var headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('token', token);
+        this.baseService.get('note/code/' + code, headers)
             .subscribe(
             data => successCallback(data),
             err => {
+                if (err.status == 401) {
+                    if (errorCallback) errorCallback(401);
+                    return;
+                }
                 if (err.status >= 400 && err.status < 500) {
                     errorCallback(JSON.parse(err._body).message);
                 }
@@ -31,7 +39,7 @@ export class NoteService {
 
     createNote(note: Note, successCallback: (data: any) => void, errorCallback: (data: any) => void) {
         this.baseService.post('note', note)
-        .subscribe(
+            .subscribe(
             data => successCallback(data),
             err => {
                 if (err.status >= 400 && err.status < 500) {
@@ -45,13 +53,29 @@ export class NoteService {
 
     updateNote(note: Note, successCallback: (data: any) => void, errorCallback: (data: any) => void) {
         this.baseService.put('note', note)
-        .subscribe(
+            .subscribe(
             data => {
-                if(successCallback) successCallback(data);
+                if (successCallback) successCallback(data);
             },
             err => {
                 if (err.status >= 400 && err.status < 500) {
-                    if(errorCallback) errorCallback(JSON.parse(err._body).message);
+                    if (errorCallback) errorCallback(JSON.parse(err._body).message);
+                }
+                else {
+                    throw new Error(err);
+                }
+            });
+    }
+
+    setPassword(note: Note, successCallback: (data: any) => void, errorCallback: (data: any) => void) {
+        this.baseService.put('note/password/' + note.code, note)
+            .subscribe(
+            data => {
+                if (successCallback) successCallback(data);
+            },
+            err => {
+                if (err.status >= 400 && err.status < 500) {
+                    if (errorCallback) errorCallback(JSON.parse(err._body).message);
                 }
                 else {
                     throw new Error(err);
