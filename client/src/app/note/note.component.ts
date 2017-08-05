@@ -15,7 +15,7 @@ import { ModalType } from '../modal/modal-type.enum';
 })
 export class NoteComponent {
   @ViewChild('modal') modal: any;
-  private note: Note = new Note();
+  public note: Note = new Note();
   private id: string;
   private typingTimer: number;
   private doneTypingInterval: Number = 800;

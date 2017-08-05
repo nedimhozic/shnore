@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var mongoose = require('mongoose');
 var Promise = require('bluebird');
+var dotenv = require('dotenv');
 
 var index = require('./index');
 var note = require('./note/note.route');
@@ -12,8 +13,9 @@ var note = require('./note/note.route');
 var config = require('./config');
 
 var app = express();
+dotenv.load();
 
-var port = 8001;
+var port = process.env.PORT || 3000;
 
 //View Engine
 app.set('views', path.join(__dirname, 'views'));

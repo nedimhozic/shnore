@@ -2,8 +2,10 @@
     <div class="modal fade" tabindex="-1" [ngClass]="{'in': visibleAnimate}" [ngStyle]="{'display': visible ? 'block' : 'none', 'opacity': visibleAnimate ? 1 : 0}">
         <span *ngIf="isCloseVisible" (click)="close($event)" class="close-btn">X</span>
         <div class="modal-dialog">
-                <input [(ngModel)]="password" type="password" id="password" placeholder="Password">
-                <button id="save" (click)="onSubmit()">{{ btnValue }}</button>
+            <form (ngSubmit)="onSubmit()">
+                <input [(ngModel)]="password" name="password" type="password" id="password" placeholder="Password">
+                <button type="submit" id="save">{{ btnValue }}</button>
+            </form>
         </div>
     </div>
 </div>

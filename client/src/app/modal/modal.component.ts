@@ -15,7 +15,7 @@ export class ModalComponent {
 
   public type: ModalType;
   public btnValue: string;
-  private isCloseVisible: boolean = false;
+  public isCloseVisible: boolean = false;
 
   constructor(
     private renderer: Renderer,
