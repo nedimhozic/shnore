@@ -15,14 +15,28 @@ export class NoteService {
 
     constructor(private baseService: BaseService) { }
 
-    getByCode(code: string, token: string, successCallback: (data: any) => void, errorCallback: (data: any) => void) {
-        var headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        headers.append('Accept', 'application/json');
-        headers.append('token', token);
+    getByCode(code: string, successCallback: (data: any) => void, errorCallback: (data: any) => void) {
+        let headers = new Headers();
+        if (localStorage.getItem('shnore')) {
+            headers.append('Content-Type', 'application/json');
+            headers.append('Accept', 'application/json');
+            headers.append('token', localStorage.getItem('shnore'));
+        }
         this.baseService.get('note/code/' + code, headers)
             .subscribe(
-            data => successCallback(data),
+            data => {
+                if (data.status == 203) {
+                    return errorCallback(data.data);
+                }
+
+                if (data.token) {
+                    localStorage.setItem('shnore', data.token);
+                } else {
+                    localStorage.removeItem('shnore');
+                }
+
+                successCallback(data.data);
+            },
             err => {
                 if (err.status == 401) {
                     if (errorCallback) errorCallback(401);
@@ -52,7 +66,14 @@ export class NoteService {
     }
 
     updateNote(note: Note, successCallback: (data: any) => void, errorCallback: (data: any) => void) {
-        this.baseService.put('note', note)
+        let headers;
+        if (localStorage.getItem('shnore')) {
+            headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            headers.append('Accept', 'application/json');
+            headers.append('token', localStorage.getItem('shnore'));
+        }
+        this.baseService.put('note', note, headers)
             .subscribe(
             data => {
                 if (successCallback) successCallback(data);
@@ -68,10 +89,28 @@ export class NoteService {
     }
 
     setPassword(note: Note, successCallback: (data: any) => void, errorCallback: (data: any) => void) {
+        if (!note.code) return;
         this.baseService.put('note/password/' + note.code, note)
             .subscribe(
             data => {
-                if (successCallback) successCallback(data);
+                if (!data) return;
+                localStorage.setItem('shnore', data);
+            },
+            err => {
+                throw new Error(err);
+            });
+    }
+
+    getToken(code:string, password: string, successCallback: () => void, errorCallback: (data: any) => void) {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Accept', 'application/json');
+        headers.append('token', password);
+        this.baseService.get('note/token/' + code, headers)
+            .subscribe(
+            data => {
+                localStorage.setItem('shnore', data);
+                successCallback();
             },
             err => {
                 if (err.status >= 400 && err.status < 500) {
@@ -80,6 +119,7 @@ export class NoteService {
                 else {
                     throw new Error(err);
                 }
-            });
+            }
+            )
     }
 }

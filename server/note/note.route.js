@@ -7,10 +7,9 @@ var NoteBO = require('./note.business');
 router.get('/code/:id', function (req, res) {
     let code = req.params.id;
     let token = req.headers.token;
-    console.log(token);
     NoteBO.getByCode(code, token).then((response) => {
         res.status(response.status);
-        res.json(response.data);
+        res.json(response);
     }).catch((response) => {
         res.status(response.status);
         if (response.status == 500) {
@@ -24,7 +23,7 @@ router.get('/code/:id', function (req, res) {
 //Get By ID
 router.get('/:id', function (req, res) {
     let id = req.params.id;
-    
+
     NoteBO.getById(id).then((response) => {
         res.status(response.status);
         res.json(response.data);
@@ -58,8 +57,9 @@ router.post('', function (req, res) {
 //Update Note
 router.put('', function (req, res) {
     let note = req.body;
+    let token = req.headers.token;
 
-    NoteBO.updateNote(note).then((response) => {
+    NoteBO.updateNote(note, token).then((response) => {
         res.status(response.status);
         res.json(response.data);
     }).catch((response) => {
@@ -78,6 +78,24 @@ router.put('/password/:id', function (req, res) {
     let note = req.body;
 
     NoteBO.setPassword(code, note.password).then((response) => {
+        res.status(response.status);
+        res.json(response.data);
+    }).catch((response) => {
+        res.status(response.status);
+        if (response.status == 500) {
+            res.send(response.error);
+        } else {
+            res.json({ message: response.error });
+        }
+    });
+});
+
+//Generate token
+router.get('/token/:id', function (req, res) {
+    let code = req.params.id;
+    let password = req.headers.token;
+
+    NoteBO.getToken(code, password).then((response) => {
         res.status(response.status);
         res.json(response.data);
     }).catch((response) => {

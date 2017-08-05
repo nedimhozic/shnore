@@ -15,6 +15,7 @@ export class ModalComponent {
 
   public type: ModalType;
   public btnValue: string;
+  private isCloseVisible: boolean = false;
 
   constructor(
     private renderer: Renderer,
@@ -26,6 +27,7 @@ export class ModalComponent {
 
   public show(_type: ModalType): void {
     this.type = _type;
+    this.isCloseVisible = this.type == ModalType.Set;
     if (this.type == ModalType.Confirm) this.btnValue = 'Confirm';
     else this.btnValue = 'Set';
 
@@ -41,14 +43,10 @@ export class ModalComponent {
     this.renderer.setElementStyle(this.overlay.nativeElement, 'opacity', '0');
     this.visible = false;
   }
-<<<<<<< HEAD
-=======
 
-  public onContainerClicked(event: MouseEvent): void {
+  public close(event: MouseEvent): void {
     if (this.type == ModalType.Confirm) return;
-    if ((<HTMLElement>event.target).classList.contains('modal')) {
-      this.hide();
-    }
+    this.hide();
   }
 
   public onSubmit(): void {
@@ -61,5 +59,4 @@ export class ModalComponent {
     this.password = '';
     this.hide();
   }
->>>>>>> 668d07c2ee6f910642a8e365e3691fa9c1bcddd8
 }

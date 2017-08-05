@@ -53,3 +53,8 @@ a {
 header #lock {
     margin-top: 35px;
 }
+
+.beta {
+    margin-top: 50px;
+    color: #e8d7c0;
+}

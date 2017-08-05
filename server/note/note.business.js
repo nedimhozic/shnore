@@ -2,6 +2,7 @@ var Promise = require('bluebird');
 
 var Note = require('./note');
 var Crypt = require('../helpers/crypt');
+var Auth = require('../helpers/auth');
 const HttpStatus = require('../helpers/statuses');
 
 var ErrorResponse = {
@@ -43,36 +44,34 @@ module.exports.getByCode = function (code, token) {
             let response = {
                 status: HttpStatus.Accepted,
                 data: note
-            }
+            };
 
             if (note.password) {
                 if (!token) {
-                    ErrorResponse.status = HttpStatus.Unauthorized;
-                    ErrorResponse.error = 'Missing token.';
-                    reject(ErrorResponse);
+                    let error = {
+                        status: HttpStatus.NonAuthoritative,
+                        data: 'Missing token'
+                    }
+                    resolve(error);
                     return;
                 }
-
-                Crypt.compare(token, note.password, function (err, isMatch) {
-                    if (err) {
-                        ErrorResponse.status = HttpStatus.InternalServerError;
-                        ErrorResponse.error = err;
-                        reject(ErrorResponse);
-                        return;
+                var data = Auth.check(token);
+                if (data.code == note.code && data.token == note.password) {
+                    response.data.password = '';
+                    resolve(response);
+                    return;
+                } else {
+                    let error = {
+                        status: HttpStatus.NonAuthoritative,
+                        data: 'Invalid password'
                     }
-                    if (isMatch) {
-                        resolve(response);
-                        return;
-                    } else {
-                        ErrorResponse.status = HttpStatus.Unauthorized;
-                        ErrorResponse.error = 'Invalid token.';
-                        reject(ErrorResponse);
-                        return;
-                    }
-                });
+                    resolve(error);
+                    return;
+                }
+            } else {
+                resolve(response);
                 return;
             }
-            resolve(response);
         });
     });
 }
@@ -124,7 +123,7 @@ module.exports.createNote = function (note) {
     });
 }
 
-module.exports.updateNote = function (note) {
+module.exports.updateNote = function (note, token) {
     return new Promise((resolve, reject) => {
         if (!note || !note._id) {
             ErrorResponse.status = HttpStatus.BadRequest
@@ -132,6 +131,46 @@ module.exports.updateNote = function (note) {
             reject(ErrorResponse);
             return;
         } else {
+            Note.getByCode(note.code, function (err, dbNote) {
+                if (err) {
+                    ErrorResponse.status = HttpStatus.InternalServerError;
+                    ErrorResponse.error = err;
+                    reject(ErrorResponse);
+                    return;
+                }
+
+                if (dbNote.password) {
+                    if (!token) {
+                        ErrorResponse.status = HttpStatus.Unauthorized
+                        ErrorResponse.error = 'Unauthorized';
+                        reject(ErrorResponse);
+                        return;
+                    } else {
+                        let data = Auth.check(token);
+                        if (data.code == dbNote.code && data.token == dbNote.password) {
+                            Note.updateNote(note, function (err, note) {
+                                if (err) {
+                                    ErrorResponse.status = HttpStatus.InternalServerError;
+                                    ErrorResponse.error = err;
+                                    reject(ErrorResponse);
+                                    return;
+                                }
+                                let response = {
+                                    status: HttpStatus.Accepted,
+                                    data: note
+                                };
+                                resolve(response);
+                            });
+                        } else {
+                            ErrorResponse.status = HttpStatus.Unauthorized
+                            ErrorResponse.error = 'Invalid token';
+                            reject(ErrorResponse);
+                            return;
+                        }
+                    }
+                }
+            });
+
             Note.updateNote(note, function (err, note) {
                 if (err) {
                     ErrorResponse.status = HttpStatus.InternalServerError;
@@ -172,14 +211,49 @@ module.exports.setPassword = function (code, password) {
                         reject(ErrorResponse);
                         return;
                     }
+                    let token = Auth.getToken(code, hash);
                     let response = {
                         status: HttpStatus.Accepted,
-                        data: note
+                        data: token
                     };
                     resolve(response);
                 });
             });
 
         }
+    });
+}
+
+module.exports.getToken = function (code, password) {
+    return new Promise((resolve, reject) => {
+        Note.getByCode(code, function (err, note) {
+            if (err) {
+                ErrorResponse.status = HttpStatus.InternalServerError;
+                ErrorResponse.error = err;
+                reject(ErrorResponse);
+                return;
+            }
+            Crypt.compare(password, note.password, function (err, isMatch) {
+                if (err) {
+                    ErrorResponse.status = HttpStatus.InternalServerError;
+                    ErrorResponse.error = err;
+                    reject(ErrorResponse);
+                    return;
+                }
+                if (isMatch) {
+                    var token = Auth.getToken(code, note.password);
+                    let response = {
+                        status: HttpStatus.Accepted,
+                        data: token
+                    };
+                    resolve(response);
+                } else {
+                    ErrorResponse.status = HttpStatus.Unauthorized
+                    ErrorResponse.error = 'Invalid password';
+                    reject(ErrorResponse);
+                    return;
+                }
+            });
+        });
     });
 }

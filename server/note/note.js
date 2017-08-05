@@ -30,7 +30,7 @@ module.exports.createNote = function (newNote, callback) {
 
 module.exports.updateNote = function (note, callback) {
     var query = { _id: note._id };
-    Note.findOneAndUpdate(query, note, { new: true }, callback);
+    Note.findOneAndUpdate(query, { content: note.content }, { new: true }, callback);
 }
 
 module.exports.setPassword = function (code, password, callback) {

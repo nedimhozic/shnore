@@ -1,9 +1,8 @@
 <header>
-<<<<<<< HEAD
   <div id="logo">
-    <a href="#" id="logo_text">SHNORE</a></div>
+    <a href="#" id="logo_text">SHNORE</a><span class="beta">beta</span></div>
   <div id="nav">
-    <a href="javascript:void(0)" title="Set password" (click)="modal.show()">
+    <a href="javascript:void(0)" title="Set password" (click)="openModal()">
       <svg id="lock" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
         width="361.118px" height="361.118px" viewBox="0 0 361.118 361.118" style="enable-background:new 0 0 361.118 361.118;"
         xml:space="preserve">
@@ -20,26 +19,4 @@
 </header>
 <router-outlet></router-outlet>
 <app-modal #modal>
-  <div class="app-modal-header">
-    header
-  </div>
-  <div class="app-modal-body">
-    Whatever content you like, form fields, anything
-  </div>
-  <div class="app-modal-footer">
-    <button type="button" class="btn btn-default" (click)="modal.hide()">Close</button>
-    <button type="button" class="btn btn-primary">Save changes</button>
-  </div>
 </app-modal>
-=======
-    <div id="logo">
-        <a href="#" id="logo_img"><img alt="Logo" src="../assets/shnore_logo.png"/></a>
-        <a href="#" id="logo_text">hnore</a></div>
-    <div id="nav">
-        <a href="#">Help</a>
-        <span class="separator">|</span>
-        <a href="javascript:void(0)" (click)="openModal()">Set Password</a>
-    </div>
-</header>
-<router-outlet></router-outlet>
->>>>>>> 668d07c2ee6f910642a8e365e3691fa9c1bcddd8

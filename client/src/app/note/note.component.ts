@@ -32,7 +32,7 @@ export class NoteComponent {
         let guid = UUID.UUID();
         this.router.navigateByUrl('/' + guid);
       } else {
-        this.noteService.getByCode(this.id, '', this.successCallback.bind(this), this.errorCallback.bind(this));
+        this.noteService.getByCode(this.id, this.successCallback.bind(this), this.errorCallback.bind(this));
       }
     });
 
@@ -46,14 +46,16 @@ export class NoteComponent {
 
     this.trigger.setPasswordSub.subscribe((password: string) => {
       this.note.password = password;
-      this.noteService.setPassword(this.note, function (data) {
-
-      }, null);
+      this.noteService.setPassword(this.note, null, null);
     });
 
     this.trigger.confirmPasswordSub.subscribe((password: string) => {
-      this.noteService.getByCode(this.id, password, this.successCallback.bind(this), this.errorCallback.bind(this));
+      this.noteService.getToken(this.id, password, this.getTokenSuccess.bind(this), this.errorCallback.bind(this))
     });
+  }
+
+  getTokenSuccess() {
+    this.noteService.getByCode(this.id, this.successCallback.bind(this), this.errorCallback.bind(this));
   }
 
   successCallback(data: any) {
@@ -65,8 +67,7 @@ export class NoteComponent {
   }
 
   errorCallback(data: any) {
-    if (data == 401)
-      this.trigger.openModal(ModalType.Confirm);
+    this.trigger.openModal(ModalType.Confirm);
   }
 
   onKeyup() {

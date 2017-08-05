@@ -9,7 +9,7 @@ import 'rxjs/add/observable/throw';
 @Injectable()
 export class BaseService {
     protected headers: Headers;
-    protected SERVICE_URL: string = 'http://localhost:8001/api/'
+    protected SERVICE_URL: string = 'https://shnoreback.herokuapp.com/api/'
 
     constructor(private _http: Http) {
         this.headers = new Headers();
@@ -22,7 +22,9 @@ export class BaseService {
 
         return this._http.get(this.SERVICE_URL + url, { headers: headers })
             .map((res: Response) => res.json())
-            .catch(this.handleError);
+            .catch(e => { 
+                return this.handleError(e); 
+            });
     }
 
 
@@ -31,7 +33,7 @@ export class BaseService {
 
         return this._http.post(this.SERVICE_URL + url, data, { headers: headers })
             .map((res: Response) => BaseService.json(res))
-            .catch(this.handleError);
+            .catch(e => { return this.handleError(e); });
     }
 
     put(url: string, data: any, headers?: Headers): Observable<any> {
@@ -39,7 +41,7 @@ export class BaseService {
 
         return this._http.put(this.SERVICE_URL + url, data, { headers: headers })
             .map((res: Response) => BaseService.json(res))
-            .catch(this.handleError);
+            .catch(e => { return this.handleError(e); });
     }
 
     remove(url: string, data?: any, headers?: Headers): Observable<any> {
@@ -47,7 +49,7 @@ export class BaseService {
 
         return this._http.delete(this.SERVICE_URL + url, { headers: headers })
             .map((res: Response) => BaseService.json(res))
-            .catch(this.handleError);
+            .catch(e => { return this.handleError(e); });
     }
 
     private static json(res: Response): any {
