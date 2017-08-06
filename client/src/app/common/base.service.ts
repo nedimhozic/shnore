@@ -9,7 +9,7 @@ import 'rxjs/add/observable/throw';
 @Injectable()
 export class BaseService {
     protected headers: Headers;
-    protected SERVICE_URL: string = 'https://shnoreback.herokuapp.com/api/'
+    protected SERVICE_URL: string = 'http://localhost:3000/api/' // 'https://shnoreback.herokuapp.com/api/'
 
     constructor(private _http: Http) {
         this.headers = new Headers();

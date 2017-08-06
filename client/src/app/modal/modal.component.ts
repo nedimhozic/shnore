@@ -9,6 +9,7 @@ import { ModalType } from './modal-type.enum';
 })
 export class ModalComponent {
   @ViewChild('overlay') overlay: ElementRef;
+  @ViewChild('passwordInput') passwordInput: ElementRef;
   public visible = false;
   public visibleAnimate = false;
   public password: string;
@@ -34,6 +35,7 @@ export class ModalComponent {
     this.visible = true;
     this.renderer.setElementClass(this.overlay.nativeElement, 'overlay', true);
     this.renderer.setElementStyle(this.overlay.nativeElement, 'opacity', '1');
+    this.passwordInput.nativeElement.focus();
     setTimeout(() => this.visibleAnimate = true, 100);
   }
 

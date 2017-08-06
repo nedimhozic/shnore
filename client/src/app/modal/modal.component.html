@@ -3,7 +3,7 @@
         <span *ngIf="isCloseVisible" (click)="close($event)" class="close-btn">X</span>
         <div class="modal-dialog">
             <form (ngSubmit)="onSubmit()">
-                <input [(ngModel)]="password" name="password" type="password" id="password" placeholder="Password">
+                <input #passwordInput [(ngModel)]="password" name="password" type="password" id="password" placeholder="Password">
                 <button type="submit" id="save">{{ btnValue }}</button>
             </form>
         </div>

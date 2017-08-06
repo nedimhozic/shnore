@@ -41,6 +41,7 @@ module.exports.getByCode = function (code, token) {
                 });
                 return;
             }
+            note.content = Crypt.decode(note.content);
             let response = {
                 status: HttpStatus.Accepted,
                 data: note
@@ -148,6 +149,7 @@ module.exports.updateNote = function (note, token) {
                     } else {
                         let data = Auth.check(token);
                         if (data.code == dbNote.code && data.token == dbNote.password) {
+                            note.content = Crypt.encode(note.content);
                             Note.updateNote(note, function (err, note) {
                                 if (err) {
                                     ErrorResponse.status = HttpStatus.InternalServerError;
@@ -155,6 +157,7 @@ module.exports.updateNote = function (note, token) {
                                     reject(ErrorResponse);
                                     return;
                                 }
+                                note.content = Crypt.decode(note.content);
                                 let response = {
                                     status: HttpStatus.Accepted,
                                     data: note
@@ -168,21 +171,23 @@ module.exports.updateNote = function (note, token) {
                             return;
                         }
                     }
+                } else {
+                    note.content = Crypt.encode(note.content);
+                    Note.updateNote(note, function (err, note) {
+                        if (err) {
+                            ErrorResponse.status = HttpStatus.InternalServerError;
+                            ErrorResponse.error = err;
+                            reject(ErrorResponse);
+                            return;
+                        }
+                        note.content = Crypt.decode(note.content);
+                        let response = {
+                            status: HttpStatus.Accepted,
+                            data: note
+                        };
+                        resolve(response);
+                    });
                 }
-            });
-
-            Note.updateNote(note, function (err, note) {
-                if (err) {
-                    ErrorResponse.status = HttpStatus.InternalServerError;
-                    ErrorResponse.error = err;
-                    reject(ErrorResponse);
-                    return;
-                }
-                let response = {
-                    status: HttpStatus.Accepted,
-                    data: note
-                };
-                resolve(response);
             });
         }
     });
