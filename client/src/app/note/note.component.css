@@ -15,7 +15,7 @@
 .paper-content {
     position: absolute;
     top: 30px; right: 0; bottom: 30px; left: 0px;
-    background: linear-gradient(transparent, transparent 29px, #a7a5a5 28px);
+        background: linear-gradient(transparent, transparent 29px, rgba(167, 165, 165, 0.46) 28px);
     background-size: 30px 30px;
 }
 

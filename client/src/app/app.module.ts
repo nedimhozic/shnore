@@ -11,7 +11,6 @@ import { HelpComponent } from './help/help.component';
 
 import { BaseService } from './common/base.service';
 import { TriggerService } from './common/trigger.service';
-import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +26,7 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
     ReactiveFormsModule,
     HttpModule
   ],
-  providers: [BaseService, TriggerService, CookieService],
+  providers: [BaseService, TriggerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
