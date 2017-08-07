@@ -1,0 +1,69 @@
+.tip {
+    display:inline-block;
+    background-color: #3ca3ec;
+    padding: 10px;
+    position: absolute;
+    color: #fff;
+    font-family: "Lato", "Lucida Grande", "Lucida Sans Unicode", Tahoma, Sans-Serif;
+    border-radius: 10px;
+    z-index:3;
+}
+
+div.tip:after{
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-width: 11px;
+    border-style: solid;
+    border-color: transparent transparent #3ca3ec transparent;
+    top: -22px;
+}
+
+.url.tip {
+    top: 20px;
+    left: 200px;
+}
+
+.url.tip:after {
+    left: 60px;
+}
+
+.password.tip {
+    top: 87px;
+    right: 22px;
+}
+
+.password.tip:after {
+    right:20px;
+}
+
+.content.tip {
+    top: 415px;
+    left: 70px;
+}
+
+.content.tip:after {
+    left:40px;
+}
+
+.overlay {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    position: absolute;
+    z-index: 2;
+    opacity: 1;
+    background:transparent;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+

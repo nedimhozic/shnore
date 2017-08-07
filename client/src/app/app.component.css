@@ -58,3 +58,14 @@ header #lock {
     margin-top: 50px;
     color: #e8d7c0;
 }
+
+.encrypted {
+    font-family: Verdana;
+    color:#a7a5a5;
+    font-size:10px;
+    text-align: center;
+}
+
+.encrypted a {
+    text-decoration: underline;
+}

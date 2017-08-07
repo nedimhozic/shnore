@@ -18,5 +18,6 @@
   </div>
 </header>
 <router-outlet></router-outlet>
-<app-modal #modal>
-</app-modal>
+<div class="encrypted">Don't worry! All your content is encrypted.<br/>
+&#169; Shnore {{today | date:'y'}} | Powered by <a href="https://nedimhozic.com/" target="_blank">Nedim Hozić</a></div>
+<help *ngIf="showHelp" (click)="closeHelp()"></help>

@@ -33,7 +33,7 @@
 /libpeerconnection.log
 npm-debug.log
 testem.log
-config.json
+server/config.json
 /typings
 
 # e2e
