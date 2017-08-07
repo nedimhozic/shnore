@@ -34,6 +34,7 @@
 npm-debug.log
 testem.log
 server/config.js
+config.js
 /typings
 
 # e2e
