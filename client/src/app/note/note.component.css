@@ -14,26 +14,31 @@
 
 .paper-content {
     position: absolute;
-    top: 30px; right: 0; bottom: 30px; left: 0px;
-        background: linear-gradient(transparent, transparent 29px, rgba(167, 165, 165, 0.46) 28px);
-    background-size: 30px 30px;
+    top: 30px;
+    right: 0;
+    bottom: 30px;
+    left: 0;
+    background: linear-gradient(transparent,transparent 25px,hsla(0,1%,65%,.46) 0);
+    background-size: 26px 26px;
 }
 
 .paper-content textarea {
-    width: 100%;
+     width: 100%;
     max-width: 100%;
     height: 100%;
     max-height: 100%;
-    line-height: 30px;
+    line-height: 26px;
     padding: 0 10px;
     border: 0;
     outline: 0;
     background: transparent;
-    color: #a7a5a5;
-    font-size: 18px;
+    color: #666;
+    font-size: 14px;
     box-sizing: border-box;
     z-index: 1;
     resize: none;
+    font-weight: 100;
+    letter-spacing: 1px;
 }
 
 footer {
